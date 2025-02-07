@@ -30,7 +30,39 @@ public class SectionDAO {
             if (conn.isValid(0)) {
                 
                 // INSERT YOUR CODE HERE
+                ps = conn.prepareStatement(QUERY_FIND);
+                ps.setInt(1, termid);
+                ps.setString(2, subjectid);
+                ps.setString(3, num);
                 
+                boolean hasresults = ps.execute();
+                        
+                if (hasresults) {
+                    rs = ps.getResultSet();
+                    rsmd = rs.getMetaData();
+                
+                    StringBuilder jsonResult = new StringBuilder("[");
+                       
+                    while(rs.next()) {
+                        jsonResult.append("{");
+                        
+                        for (int index = 1; index <= rsmd.getColumnCount(); index++) {
+                            String columnName = rsmd.getColumnName(index);
+                            String columnValue = rs.getString(index);
+                            
+                            jsonResult.append("\"").append(columnName).append("\":\"").append(columnValue).append("\"");
+                            
+                            if (index < rsmd.getColumnCount()) {
+                                jsonResult.append(",");
+                            }
+                        }
+                         
+                        jsonResult.append("}, ");
+                    }
+                    jsonResult.append("]");
+                    
+                    result = jsonResult.toString();
+                }
             }
             
         }
