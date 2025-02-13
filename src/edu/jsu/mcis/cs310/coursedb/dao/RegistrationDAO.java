@@ -8,6 +8,12 @@ import java.sql.Statement;
 
 public class RegistrationDAO {
     
+    private static final String QUERY_CREATE = "INSERT INTO registration (studentid, termid, crn) values (?, ?, ?)";
+    private static final String QUERY_DROP = "DELETE FROM registration WHERE studentid = ? AND termid = ? and crn = ?";
+    private static final String QUERY_WITHDRAW = "DELETE FROM registration WHERE studentid = ? and termid = ?";
+    
+    
+    
     private final DAOFactory daoFactory;
     
     RegistrationDAO(DAOFactory daoFactory) {
@@ -28,6 +34,19 @@ public class RegistrationDAO {
             if (conn.isValid(0)) {
                 
                 // INSERT YOUR CODE HERE
+                
+                              
+                ps = conn.prepareStatement(QUERY_CREATE);
+                
+                ps.setInt(1, studentid);
+                ps.setInt(2, termid);
+                ps.setInt(3, crn);
+                
+                int updateCount = ps.executeUpdate();
+                
+                if (updateCount > 0) {
+                    result = true;
+                }
                 
             }
             
@@ -59,6 +78,17 @@ public class RegistrationDAO {
             if (conn.isValid(0)) {
                 
                 // INSERT YOUR CODE HERE
+                ps = conn.prepareStatement(QUERY_DROP);
+                
+                ps.setInt(1, studentid);
+                ps.setInt(2, termid);
+                ps.setInt(3, crn);
+                
+                int updateCount = ps.executeUpdate();
+                
+                if (updateCount > 0) {
+                    result = true;
+                }
                 
             }
             
@@ -89,6 +119,16 @@ public class RegistrationDAO {
             if (conn.isValid(0)) {
                 
                 // INSERT YOUR CODE HERE
+                ps = conn.prepareStatement(QUERY_WITHDRAW);
+                
+                ps.setInt(1, studentid);
+                ps.setInt(2, termid);
+                
+                int updateCount = ps.executeUpdate();
+                
+                if (updateCount > 0) {
+                    result = true;
+                }
                 
             }
             
