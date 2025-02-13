@@ -207,42 +207,53 @@ public class RegistrationDAO {
                 ps.setInt(1, studentid);
                 ps.setInt(2, termid);
                 
-                
-                
                 //To execute the query and check if there are results
                 boolean hasresults = ps.execute();
                         
                 if (hasresults) {
+                    //To get the results from the query and retrieve the metadata about the columns in the result.
                     rs = ps.getResultSet();
                     rsmd = rs.getMetaData();
                 
+                    //StringBuilder to construct the JSON result array.
                     StringBuilder jsonResult = new StringBuilder("[");
                     
+                    //To check if it is the first record in the results.
                     boolean first = true;
                     while(rs.next()) {
+                        //Adds a comma before appending the next JSON object if it is not the first result.
                         if (!first) {
                             jsonResult.append(",");
                         }
+                        //Becomes false after the first result.
                         first = false;
+                        
+                        //To being a new JSON object
                         jsonResult.append("{");
                         
+                        //Loop to go through all the columns in the current row and append them to the JSON object.
                         for (int index = 1; index <= rsmd.getColumnCount(); index++) {
                             String columnName = rsmd.getColumnName(index);
                             String columnValue = rs.getString(index);
                             
+                            //If the column is null, set it to an empty string.
                             if (columnValue == null) {
                                 columnValue = "";
                             }
                             
+                            //Appends the column to the JSON object.
                             jsonResult.append("\"").append(columnName).append("\":\"").append(columnValue).append("\"");
                             
+                            //Add a comma if it's not the last column.
                             if (index < rsmd.getColumnCount()) {
                                 jsonResult.append(",");
                             }
                         }
                          
+                        //Ends the current JSON object
                         jsonResult.append("}");
                     }
+                    //Ends the JSON array after the program has gone through all the rows.
                     jsonResult.append("]");
                     
                     result = jsonResult.toString();
@@ -251,6 +262,7 @@ public class RegistrationDAO {
             
         }
         
+        //Prints any exception that occurs and ensures that resources are closed.
         catch (Exception e) { e.printStackTrace(); }
         
         finally {
@@ -260,6 +272,7 @@ public class RegistrationDAO {
             
         }
         
+        //Returns the result.
         return result;
         
     }

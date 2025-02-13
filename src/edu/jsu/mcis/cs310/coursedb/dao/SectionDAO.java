@@ -55,10 +55,10 @@ public class SectionDAO {
                     rs = ps.getResultSet();
                     rsmd = rs.getMetaData();
                 
-                    //StringBuilder to construct the JSON result array
+                    //StringBuilder to construct the JSON result array.
                     StringBuilder jsonResult = new StringBuilder("[");
                     
-                    //To check if it is the first record in the results
+                    //To check if it is the first record in the results.
                     boolean first = true;
                     while(rs.next()) {
                         //Adds a comma before appending the next JSON object if it is not the first result. 
